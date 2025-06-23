@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MeraStore.Shared.Kernel.Context" Version="1.0.1" />
+    <PackageReference Include="MeraStore.Shared.Kernel.Core" Version="1.0.0" />
+    <PackageReference Include="MeraStore.Shared.Kernel.Exceptions" Version="1.0.0" />
+    <PackageReference Include="MeraStore.Shared.Kernel.Helpers" Version="1.0.0" />
+  </ItemGroup>
+
+</Project>
