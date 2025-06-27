@@ -7,7 +7,25 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MeraStore.Shared.Kernel.Persistence" Version="1.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.6">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.6">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MeraStore.Services.Cross.Cutting.Application\MeraStore.Services.Cross.Cutting.Application.csproj" />
+    <ProjectReference Include="..\MeraStore.Services.Cross.Cutting.Domain\MeraStore.Services.Cross.Cutting.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="configs\log-schema.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

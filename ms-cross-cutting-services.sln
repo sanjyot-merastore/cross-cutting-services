@@ -21,6 +21,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeraStore.Services.Cross.Cu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeraStore.Services.Cross.Cutting.Api.Architecture.Tests", "test\MeraStore.Services.Cross.Cutting.Api.Architecture.Tests\MeraStore.Services.Cross.Cutting.Api.Architecture.Tests.csproj", "{9414F2FB-6B27-4CA1-9954-3F02A19619E8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ms-cross-cutting-services.AppHost", "aspire\ms-cross-cutting-services.AppHost\ms-cross-cutting-services.AppHost.csproj", "{EA7678F0-6A14-42FA-AF0D-73F193A84693}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ms-cross-cutting-services.ServiceDefaults", "aspire\ms-cross-cutting-services.ServiceDefaults\ms-cross-cutting-services.ServiceDefaults.csproj", "{44F35E40-D9AE-4210-F2D1-D1615DF3F4B3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "aspire", "aspire", "{16598E28-E6F6-4440-A565-21E4C122B124}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +57,14 @@ Global
 		{9414F2FB-6B27-4CA1-9954-3F02A19619E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9414F2FB-6B27-4CA1-9954-3F02A19619E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9414F2FB-6B27-4CA1-9954-3F02A19619E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA7678F0-6A14-42FA-AF0D-73F193A84693}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA7678F0-6A14-42FA-AF0D-73F193A84693}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA7678F0-6A14-42FA-AF0D-73F193A84693}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA7678F0-6A14-42FA-AF0D-73F193A84693}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44F35E40-D9AE-4210-F2D1-D1615DF3F4B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44F35E40-D9AE-4210-F2D1-D1615DF3F4B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44F35E40-D9AE-4210-F2D1-D1615DF3F4B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44F35E40-D9AE-4210-F2D1-D1615DF3F4B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -62,6 +76,8 @@ Global
 		{6367FDC2-339E-4A5E-BC7B-8EFBD215CC99} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{0130D06B-7338-41A4-8DAA-2482E42123F3} = {4E7F59FE-5A30-4438-BA6C-0EC5CCDC3ECB}
 		{9414F2FB-6B27-4CA1-9954-3F02A19619E8} = {4E7F59FE-5A30-4438-BA6C-0EC5CCDC3ECB}
+		{EA7678F0-6A14-42FA-AF0D-73F193A84693} = {16598E28-E6F6-4440-A565-21E4C122B124}
+		{44F35E40-D9AE-4210-F2D1-D1615DF3F4B3} = {16598E28-E6F6-4440-A565-21E4C122B124}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D01059B6-65FF-414A-BE6C-F93AECEF2389}
