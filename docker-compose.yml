@@ -1,6 +1,0 @@
-services:
-  merastore.services.cross.cutting.api:
-    image: ${DOCKER_REGISTRY-}merastoreservicescrosscuttingapi
-    build:
-      context: .
-      dockerfile: src/MeraStore.Services.Cross.Cutting.Api/Dockerfile

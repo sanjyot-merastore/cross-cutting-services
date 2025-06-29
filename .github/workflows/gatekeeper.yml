@@ -1,0 +1,83 @@
+name: Watcher
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+
+jobs:
+  jira-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Extract PR title
+        id: extract_title
+        run: |
+          PR_TITLE=$(jq -r '.pull_request.title' "$GITHUB_EVENT_PATH")
+          echo "ℹ️ PR Title BEFORE validation: '$PR_TITLE'"
+          echo "title=$PR_TITLE" >> "$GITHUB_OUTPUT"
+
+      - name: Check PR title for JIRA ticket and change type
+        id: check_title
+        run: |
+          PR_TITLE="${{ steps.extract_title.outputs.title }}"
+          echo "🔍 Evaluating PR Title: '$PR_TITLE'"
+
+          JIRA_REGEX="^[A-Z]{3,5}-[0-9]+:?"
+          CHANGE_TYPE_REGEX="^[A-Z]{3,5}-[0-9]+:?\s+(\(?(feat|fix|bugfix|hotfix|chore|docs|refactor|test|ci|perf|infra|style|revert|build|release|merge|config|cleanup|security|ux|ui|spike|wip|init|upgrade|downgrade|rollback)\)?) "
+
+          # Check for valid change type
+          echo "🔍 Checking for valid change type..."
+          if [[ ! "$PR_TITLE" =~ $CHANGE_TYPE_REGEX ]]; then
+            echo "::error::❌ Invalid PR title format. It must include a valid change type like 'feat', 'fix', etc."
+            echo "::error::✅ Allowed change types: feat, fix, hotfix, chore, docs, refactor, test, ci, perf, infra, style, revert, build, release, merge, config, cleanup, security, ux, ui, spike, wip, init, upgrade, downgrade, rollback"
+            echo "::error::🔹 Example: 'MERA-9: feat Added feature' or 'AUTH-123 (fix) Resolved issue'"
+            echo "suggested_title=$(echo "$PR_TITLE" | grep -oP '^[A-Z]{3,5}-[0-9]+' | head -n1): feat Short description here" >> "$GITHUB_OUTPUT"
+            exit 1
+          else
+            DETECTED_CHANGE_TYPE=$(echo "$PR_TITLE" | grep -oP '(feat|fix|hotfix|chore|docs|refactor|test|ci|perf|infra|style|revert|build|release|merge|config|cleanup|security|ux|ui|spike|wip|init|upgrade|downgrade|rollback)')
+            echo "✅ Change type detected: '$DETECTED_CHANGE_TYPE'"
+          fi
+
+          # Check for JIRA ticket
+          echo "🔍 Checking for JIRA ticket..."
+          if [[ ! "$PR_TITLE" =~ $JIRA_REGEX ]]; then
+            echo "::error::❌ No JIRA ticket found in PR title. Expected format: 'MERA-9 feat ...'"
+            echo "suggested_title=MERA-123: feat Short description here" >> "$GITHUB_OUTPUT"
+            exit 1
+          else
+            DETECTED_JIRA_TICKET=$(echo "$PR_TITLE" | grep -oP '^[A-Z]{3,5}-[0-9]+')
+            echo "✅ JIRA ticket detected: '$DETECTED_JIRA_TICKET'"
+            echo "suggested_title=$DETECTED_JIRA_TICKET: feat Short description here" >> "$GITHUB_OUTPUT"
+          fi
+
+          echo "✅ PR title validation PASSED."
+
+      - name: Post comment if checks fail
+        if: failure()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if command -v gh &> /dev/null; then
+            PR_NUMBER=${{ github.event.pull_request.number }}
+            REPO=${{ github.repository }}
+            SUGGESTED_TITLE="${{ steps.check_title.outputs.suggested_title }}"
+            gh pr comment "$PR_NUMBER" --repo "$REPO" --body "🚨 **Your PR title must follow the correct format!**  
+
+            **✅ Allowed Formats:**  
+            - \`MERA-9: feat Added login module\`  
+            - \`AUTH-123 fix Handled timeout issue\`  
+            - \`CORE-5 (refactor) Improved DB layer\`  
+            
+            **✅ Allowed Change Types:**  
+            \`feat\`, \`fix\`, \`hotfix\`, \`chore\`, \`docs\`, \`refactor\`, \`test\`, \`ci\`, \`perf\`, \`infra\`, \`style\`, \`revert\`, \`build\`,  
+            \`release\`, \`merge\`, \`config\`, \`cleanup\`, \`security\`, \`ux\`, \`ui\`, \`spike\`, \`wip\`, \`init\`, \`upgrade\`, \`downgrade\`, \`rollback\`
+            
+            💡 **Suggested Fix:**  
+            \`$SUGGESTED_TITLE\`
+
+            Please update your PR title accordingly. 🛠"
+          else
+            echo "⚠️ GitHub CLI (gh) not available. Cannot post comment."
