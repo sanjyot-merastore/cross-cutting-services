@@ -3,42 +3,38 @@ using Elastic.Clients.Elasticsearch;
 using MeraStore.Services.Cross.Cutting.Application.Services;
 using Newtonsoft.Json;
 
-namespace MeraStore.Services.Cross.Cutting.Infrastructure.Services
+namespace MeraStore.Services.Cross.Cutting.Infrastructure.Services;
+
+public class LogIndexTemplateService(ElasticsearchClient client, ILogFieldsProviderService loggingFieldService)
+    : ILogIndexTemplateService
 {
-    public class LogIndexTemplateService(ElasticsearchClient client, ILogFieldsProvider loggingFieldService)
-        : ILogIndexTemplateService
+    public async Task SetupTemplatesAsync()
     {
-        public async Task SetupTemplatesAsync()
+        var fields = await loggingFieldService.GetFieldsAsync();
+
+        using var doc = JsonDocument.Parse(JsonConvert.SerializeObject(fields));
+        var properties = doc.RootElement
+            .GetProperty("mappings")
+            .GetProperty("properties");
+
+        var fieldMap = properties.EnumerateObject()
+            .Where(p => p.Value.TryGetProperty("type", out _))
+            .ToDictionary(p => p.Name, p => p.Value.GetProperty("type").GetString()!);
+
+        var templateConfigs = new (string Template, string Pattern)[]
         {
-            var fields = await loggingFieldService.GetFieldsAsync();
-            using var doc = JsonDocument.Parse(JsonConvert.SerializeObject(fields));
+            ("ef-logs-template", "ef-logs-*"),
+            ("infra-logs-template", "infra-logs-*"),
+            ("app-logs-template", "app-logs-*"),
+            //("service-logs-template", "service-logs-*")
+        };
 
-            var properties = doc.RootElement
-                .GetProperty("mappings")
-                .GetProperty("properties");
-            var fieldMap = new Dictionary<string, string>();
-            foreach (var prop in properties.EnumerateObject())
-            {
-                if (prop.Value.TryGetProperty("type", out var typeProp))
-                    fieldMap[prop.Name] = typeProp.GetString()!;
-            }
+        var tasks = templateConfigs.Select(config =>
+        {
+            var manager = new IndexTemplateManager(client, fieldMap, config.Template, config.Pattern);
+            return manager.PushAsync();
+        });
 
-
-            var indexTemplates = new[]
-            {
-                "service-logs-template", "ef-logs-template", "infra-logs-template", "app-logs-template"
-            };
-
-            var indexPatterns = new[]
-            {
-                "service-logs-*", "ef-logs-*", "infra-logs-*", "app-logs-*"
-            };
-
-            for (var i = 0; i < indexTemplates.Length; i++)
-            {
-                var manager = new IndexTemplateManager(client, fieldMap, indexTemplates[i], indexPatterns[i]);
-                await manager.PushAsync();
-            }
-        }
+        await Task.WhenAll(tasks);
     }
 }

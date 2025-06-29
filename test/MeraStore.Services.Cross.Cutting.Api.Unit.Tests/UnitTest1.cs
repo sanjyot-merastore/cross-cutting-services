@@ -1,11 +1,10 @@
-namespace MeraStore.Services.Cross.Cutting.Api.Unit.Tests
+namespace MeraStore.Services.Cross.Cutting.Api.Unit.Tests;
+
+public class UnitTest1
 {
-    public class UnitTest1
+    [Fact]
+    public void Test1()
     {
-        [Fact]
-        public void Test1()
-        {
-            Assert.True(true);
-        }
+        Assert.True(true);
     }
 }

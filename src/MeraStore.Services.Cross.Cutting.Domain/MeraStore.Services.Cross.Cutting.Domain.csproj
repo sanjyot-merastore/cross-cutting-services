@@ -11,8 +11,8 @@
 		<PackageReference Include="Elastic.Serilog.Sinks" Version="8.18.1" />
 		<!--Do not update this package to 9.0.0 as it is not compatible with the current version of Elastic.Serilog.Sinks-->
 		<PackageReference Include="MeraStore.Shared.Kernel.Context" Version="1.0.1" />
-		<PackageReference Include="MeraStore.Shared.Kernel.Core" Version="1.0.1" />
-		<PackageReference Include="MeraStore.Shared.Kernel.Exceptions" Version="1.0.0" />
+		<PackageReference Include="MeraStore.Shared.Kernel.Core" Version="1.0.2" />
+		<PackageReference Include="MeraStore.Shared.Kernel.Exceptions" Version="1.0.4" />
 		<PackageReference Include="MeraStore.Shared.Kernel.Helpers" Version="1.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.6" />
 		<PackageReference Include="Serilog" Version="4.3.0" />

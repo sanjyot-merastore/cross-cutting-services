@@ -6,6 +6,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MeraStore.Services.Cross.Cutting.Infrastructure.Repositories;
 
-public class ResponseLogRepository(DbContext context, ICommitStrategy commit)
+public class ResponseLogRepository(AppDbContext context, ICommitStrategy commit)
     : Repository<ResponseLog>(context, commit), IResponseLogRepository;
 

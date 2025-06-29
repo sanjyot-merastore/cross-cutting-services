@@ -9,6 +9,9 @@ using MeraStore.Shared.Kernel.WebApi.Extensions;
 
 using Microsoft.EntityFrameworkCore;
 
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
 namespace MeraStore.Services.Cross.Cutting.Api;
 
 /// <summary>
@@ -31,17 +34,29 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddProblemDetails();
         builder.Services.AddOpenApi();
+        
+        // JSON serialization config
+        builder.Services.ConfigureHttpJsonOptions(options =>
+        {
+            options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+            options.SerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+            options.SerializerOptions.WriteIndented = true;
+        });
+
 
         builder.AddApiServices(Constants.ServiceName, enableFastEndpoints: false, defaultLogging: true);
-        builder.Services.AddCoreApiServices();
+        builder.Services.AddCoreApiServices(builder.Configuration);
 
-        //builder.Services.AddIndexMangerServices(builder.Configuration);
+        builder.AddLoggingServices();
         builder.Services.AddApplicationServices(builder.Configuration);
         builder.Services.AddInfrastructureServices(builder.Configuration);
 
         var app = builder.Build();
         
         app.UseCustomSwagger(Constants.ServiceName);
+        app.UseMiddleware<TracingMiddleware>(Constants.ServiceName);
+        app.UseMiddleware<ErrorHandlingMiddleware>();
+        //app.UseMiddleware<LoggingMiddleware>();
 
         //Apply database migrations on startup with logging
         using (var scope = app.Services.CreateScope())
@@ -51,12 +66,7 @@ public class Program
 
             await RunMigrations(logger, dbContext);
         }
-
-        app.UseMiddleware<TracingMiddleware>(Constants.ServiceName);
-        app.UseMiddleware<ErrorHandlingMiddleware>();
-        app.UseMiddleware<LoggingMiddleware>();
-
-
+        
         app.UseHttpsRedirection();
         app.UseAuthorization();
         app.MapDiscoveredEndpoints();

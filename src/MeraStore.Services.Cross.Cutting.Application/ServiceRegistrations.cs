@@ -2,16 +2,15 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace MeraStore.Services.Cross.Cutting.Application
+namespace MeraStore.Services.Cross.Cutting.Application;
+
+public static class ServiceRegistrations
 {
-    public static class ServiceRegistrations
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
     {
-        public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
-        {
 
-            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateRequestLogHandler).Assembly));
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateRequestLogHandler).Assembly));
 
-            return services;
-        }
+        return services;
     }
 }

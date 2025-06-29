@@ -70,14 +70,12 @@ public static class ServiceExtensions
     /// </summary>
     /// <param name="services">The service collection to register dependencies into.</param>
     /// <returns>The updated <see cref="IServiceCollection"/> for chaining.</returns>
-    public static IServiceCollection AddCoreApiServices(this IServiceCollection services)
+    public static IServiceCollection AddCoreApiServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddSingleton<ILogFieldsProvider, LogFieldsProvider>();
+        services.AddSingleton<ILogFieldsProviderService, LogFieldsProviderService>();
+        services.AddScoped<ILogIndexTemplateService, LogIndexTemplateService>();
 
-        //services.AddScoped<IApiLogRepository, ApiLogRepository>();
-
-        //services.AddScoped<CreateApiRequestLogHandler>();
-        //services.AddScoped<CreateApiResponseLogHandler>();
+        services.AddIndexMangerServices(configuration);
 
         return services;
     }

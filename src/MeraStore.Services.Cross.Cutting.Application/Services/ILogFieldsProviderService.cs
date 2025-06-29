@@ -2,7 +2,7 @@
 
 namespace MeraStore.Services.Cross.Cutting.Application.Services;
 
-public interface ILogFieldsProvider
+public interface ILogFieldsProviderService
 {
   Task<LoggingFields> GetFieldsAsync();
 }

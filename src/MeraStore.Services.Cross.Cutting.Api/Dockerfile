@@ -17,13 +17,14 @@ COPY ["aspire/ms-cross-cutting-services.ServiceDefaults/ms-cross-cutting-service
 COPY ["src/MeraStore.Services.Cross.Cutting.Infrastructure/MeraStore.Services.Cross.Cutting.Infrastructure.csproj", "src/MeraStore.Services.Cross.Cutting.Infrastructure/"]
 COPY ["src/MeraStore.Services.Cross.Cutting.Application/MeraStore.Services.Cross.Cutting.Application.csproj", "src/MeraStore.Services.Cross.Cutting.Application/"]
 COPY ["src/MeraStore.Services.Cross.Cutting.Domain/MeraStore.Services.Cross.Cutting.Domain.csproj", "src/MeraStore.Services.Cross.Cutting.Domain/"]
+
+ARG NUGET_PASSWORD
+RUN dotnet nuget add source "https://pkgs.dev.azure.com/merastore/MeraStore/_packaging/mera-store-feed/nuget/v3/index.json" --name "mera-store" --username "sanjyotagureddy" --password $NUGET_PASSWORD --store-password-in-clear-text
+
 RUN dotnet restore "./src/MeraStore.Services.Cross.Cutting.Api/MeraStore.Services.Cross.Cutting.Api.csproj"
 COPY . .
 WORKDIR "/src/src/MeraStore.Services.Cross.Cutting.Api"
 RUN dotnet build "./MeraStore.Services.Cross.Cutting.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
-
-ARG NUGET_PASSWORD
-RUN dotnet nuget add source "https://pkgs.dev.azure.com/merastore/MeraStore/_packaging/mera-store-feed/nuget/v3/index.json" --name "mera-store" --username "sanjyotagureddy" --password $NUGET_PASSWORD --store-password-in-clear-text
 
 # This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
