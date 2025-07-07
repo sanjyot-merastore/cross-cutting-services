@@ -31,7 +31,7 @@
 
 
 	<ItemGroup>
-		<PackageReference Include="MeraStore.Shared.Kernel.Common.Core" Version="1.0.3" />
+		<PackageReference Include="MeraStore.Shared.Kernel.Core" Version="1.0.2" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.3.0" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="9.0.6" />
 		<PackageReference Include="Microsoft.Extensions.Http.Polly" Version="9.0.6" />
