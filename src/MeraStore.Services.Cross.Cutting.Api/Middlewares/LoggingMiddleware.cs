@@ -1,7 +1,7 @@
 ﻿using MeraStore.Services.Cross.Cutting.Api.Filters;
 using MeraStore.Shared.Kernel.Logging.Interfaces;
 using MeraStore.Shared.Kernel.Logging.Loggers;
-using MeraStore.Shared.Kernel.WebApi.Middleware;
+using MeraStore.Shared.Kernel.WebApi.Middlewares;
 
 namespace MeraStore.Services.Cross.Cutting.Api.Middlewares;
 

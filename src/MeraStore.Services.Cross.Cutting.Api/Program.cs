@@ -34,7 +34,7 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddProblemDetails();
         builder.Services.AddOpenApi();
-        
+
         // JSON serialization config
         builder.Services.ConfigureHttpJsonOptions(options =>
         {
@@ -44,7 +44,7 @@ public class Program
         });
 
 
-        builder.AddApiServices(Constants.ServiceName, enableFastEndpoints: false, defaultLogging: true);
+        builder.AddApiServices(Constants.ServiceName, defaultLogging: true);
         builder.Services.AddCoreApiServices(builder.Configuration);
 
         builder.AddLoggingServices();
@@ -52,7 +52,7 @@ public class Program
         builder.Services.AddInfrastructureServices(builder.Configuration);
 
         var app = builder.Build();
-        
+
         app.UseCustomSwagger(Constants.ServiceName);
         app.UseMiddleware<TracingMiddleware>(Constants.ServiceName);
         app.UseMiddleware<ErrorHandlingMiddleware>();
@@ -66,7 +66,7 @@ public class Program
 
             await RunMigrations(logger, dbContext);
         }
-        
+
         app.UseHttpsRedirection();
         app.UseAuthorization();
         app.MapDiscoveredEndpoints();
