@@ -1,8 +1,5 @@
 ﻿using System.Net.Http.Json;
-
 using MeraStore.Services.Logging.SDK.Interfaces;
-using MeraStore.Services.Logging.SDK.Models;
-using MeraStore.Shared.Kernel.Common.Core;
 
 namespace MeraStore.Services.Logging.SDK;
 

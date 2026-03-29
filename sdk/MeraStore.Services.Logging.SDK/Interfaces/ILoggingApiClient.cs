@@ -1,7 +1,4 @@
-﻿using MeraStore.Services.Logging.SDK.Models;
-using MeraStore.Shared.Kernel.Common.Core;
-
-namespace MeraStore.Services.Logging.SDK.Interfaces;
+﻿namespace MeraStore.Services.Logging.SDK.Interfaces;
 
 public interface ILoggingServiceClient
 {
